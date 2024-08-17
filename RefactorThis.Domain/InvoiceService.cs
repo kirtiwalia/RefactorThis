@@ -42,56 +42,63 @@ namespace RefactorThis.Domain
 		private static string ProcessInvoiceWithNonZeroAmount(Payment payment, Invoice invoice)
 		{
 			string responseMessage;
-			if ( invoice.Payments != null && invoice.Payments.Any( ) )
+			decimal totalPaymentAmount = 0;
+			var remainingAmount = invoice.Amount - invoice.AmountPaid;
+			
+			if (invoice.Payments != null)
 			{
-				if ( invoice.Payments.Sum( x => x.Amount ) != 0 && invoice.Amount == invoice.Payments.Sum( x => x.Amount ) )
+				totalPaymentAmount = invoice.Payments.Sum(x => x.Amount);
+			}
+			
+			if ( totalPaymentAmount > 0 )
+			{
+				if ( invoice.Amount == totalPaymentAmount )
 				{
-					responseMessage = "invoice was already fully paid";
+					return "invoice was already fully paid";
 				}
-				else if ( invoice.Payments.Sum( x => x.Amount ) != 0 && payment.Amount > ( invoice.Amount - invoice.AmountPaid ) )
+				
+				if ( payment.Amount > remainingAmount )
 				{
-					responseMessage = "the payment is greater than the partial amount remaining";
+					return "the payment is greater than the partial amount remaining";
+				}
+
+				if ( payment.Amount == remainingAmount )
+				{
+					switch ( invoice.Type )
+					{
+						case InvoiceType.Standard:
+							invoice.AmountPaid += payment.Amount;
+							invoice.Payments.Add( payment );
+							responseMessage = "final partial payment received, invoice is now fully paid";
+							break;
+						case InvoiceType.Commercial:
+							invoice.AmountPaid += payment.Amount;
+							invoice.TaxAmount += payment.Amount * 0.14m;
+							invoice.Payments.Add( payment );
+							responseMessage = "final partial payment received, invoice is now fully paid";
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( );
+					}
+								
 				}
 				else
 				{
-					if ( ( invoice.Amount - invoice.AmountPaid ) == payment.Amount )
+					switch ( invoice.Type )
 					{
-						switch ( invoice.Type )
-						{
-							case InvoiceType.Standard:
-								invoice.AmountPaid += payment.Amount;
-								invoice.Payments.Add( payment );
-								responseMessage = "final partial payment received, invoice is now fully paid";
-								break;
-							case InvoiceType.Commercial:
-								invoice.AmountPaid += payment.Amount;
-								invoice.TaxAmount += payment.Amount * 0.14m;
-								invoice.Payments.Add( payment );
-								responseMessage = "final partial payment received, invoice is now fully paid";
-								break;
-							default:
-								throw new ArgumentOutOfRangeException( );
-						}
-								
-					}
-					else
-					{
-						switch ( invoice.Type )
-						{
-							case InvoiceType.Standard:
-								invoice.AmountPaid += payment.Amount;
-								invoice.Payments.Add( payment );
-								responseMessage = "another partial payment received, still not fully paid";
-								break;
-							case InvoiceType.Commercial:
-								invoice.AmountPaid += payment.Amount;
-								invoice.TaxAmount += payment.Amount * 0.14m;
-								invoice.Payments.Add( payment );
-								responseMessage = "another partial payment received, still not fully paid";
-								break;
-							default:
-								throw new ArgumentOutOfRangeException( );
-						}
+						case InvoiceType.Standard:
+							invoice.AmountPaid += payment.Amount;
+							invoice.Payments.Add( payment );
+							responseMessage = "another partial payment received, still not fully paid";
+							break;
+						case InvoiceType.Commercial:
+							invoice.AmountPaid += payment.Amount;
+							invoice.TaxAmount += payment.Amount * 0.14m;
+							invoice.Payments.Add( payment );
+							responseMessage = "another partial payment received, still not fully paid";
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( );
 					}
 				}
 			}
@@ -99,9 +106,10 @@ namespace RefactorThis.Domain
 			{
 				if ( payment.Amount > invoice.Amount )
 				{
-					responseMessage = "the payment is greater than the invoice amount";
+					return "the payment is greater than the invoice amount";
 				}
-				else if ( invoice.Amount == payment.Amount )
+				
+				if ( payment.Amount == invoice.Amount )
 				{
 					switch ( invoice.Type )
 					{
