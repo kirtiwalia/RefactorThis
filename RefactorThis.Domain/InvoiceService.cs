@@ -39,26 +39,14 @@ namespace RefactorThis.Domain
 			
 			if ( totalPaymentAmount > 0 )
 			{
-				if ( invoice.Amount == totalPaymentAmount )
-				{
-					return "invoice was already fully paid";
-				}
-				
-				if ( payment.Amount > remainingAmount )
-				{
-					return "the payment is greater than the partial amount remaining";
-				}
-
-				if ( payment.Amount == remainingAmount )
-				{
-					UpdateInvoice(invoice, payment);
-					return "final partial payment received, invoice is now fully paid";
-				}
-
-				UpdateInvoice(invoice, payment);
-				return "another partial payment received, still not fully paid";
+				return ProcessWithExistingPaymentBalance(payment, invoice, totalPaymentAmount, remainingAmount);
 			}
 
+			return ProcessWithoutExistingPaymentBalance(payment, invoice);
+		}
+
+		private static string ProcessWithoutExistingPaymentBalance(Payment payment, Invoice invoice)
+		{
 			if ( payment.Amount > invoice.Amount )
 			{
 				return "the payment is greater than the invoice amount";
@@ -72,6 +60,29 @@ namespace RefactorThis.Domain
 
 			UpdateInvoice(invoice, payment);
 			return "invoice is now partially paid";
+		}
+
+		private static string ProcessWithExistingPaymentBalance(Payment payment, Invoice invoice, decimal totalPaymentAmount,
+			decimal remainingAmount)
+		{
+			if ( invoice.Amount == totalPaymentAmount )
+			{
+				return "invoice was already fully paid";
+			}
+				
+			if ( payment.Amount > remainingAmount )
+			{
+				return "the payment is greater than the partial amount remaining";
+			}
+
+			if ( payment.Amount == remainingAmount )
+			{
+				UpdateInvoice(invoice, payment);
+				return "final partial payment received, invoice is now fully paid";
+			}
+
+			UpdateInvoice(invoice, payment);
+			return "another partial payment received, still not fully paid";
 		}
 
 		private static decimal GetRemainingAmount(Invoice invoice)
