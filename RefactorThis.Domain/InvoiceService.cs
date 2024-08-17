@@ -18,8 +18,6 @@ namespace RefactorThis.Domain
 		{
 			var invoice = _invoiceRepository.GetInvoice( payment.Reference );
 
-			var responseMessage = string.Empty;
-
 			if ( invoice == null )
 			{
 				throw new InvalidOperationException( "There is no invoice matching this payment" );
@@ -27,16 +25,11 @@ namespace RefactorThis.Domain
 
 			if ( invoice.Amount == 0 )
 			{
-				responseMessage = ProcessInvoiceWithZeroAmount(invoice);
-			}
-			else
-			{
-				responseMessage = ProcessInvoiceWithNonZeroAmount(payment, invoice);
+				return ProcessInvoiceWithZeroAmount(invoice);
 			}
 
-			invoice.Save();
-
-			return responseMessage;
+			return ProcessInvoiceWithNonZeroAmount(payment, invoice);
+			
 		}
 
 		private static string ProcessInvoiceWithNonZeroAmount(Payment payment, Invoice invoice)
@@ -101,6 +94,8 @@ namespace RefactorThis.Domain
 			{
 				invoice.TaxAmount += payment.Amount * 0.14m;
 			}
+			
+			invoice.Save();
 		}
 	}
 }
