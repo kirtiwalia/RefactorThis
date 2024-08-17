@@ -34,9 +34,8 @@ namespace RefactorThis.Domain
 
 		private static string ProcessInvoiceWithNonZeroAmount(Payment payment, Invoice invoice)
 		{
-			string responseMessage;
-			var totalPaymentAmount = invoice.Payments?.Sum(x => x.Amount) ?? 0;
-			var remainingAmount = invoice.Amount - invoice.AmountPaid;
+			var totalPaymentAmount = GetTotalPaymentAmount(invoice);
+			var remainingAmount = GetRemainingAmount(invoice);
 			
 			if ( totalPaymentAmount > 0 )
 			{
@@ -73,6 +72,16 @@ namespace RefactorThis.Domain
 
 			UpdateInvoice(invoice, payment);
 			return "invoice is now partially paid";
+		}
+
+		private static decimal GetRemainingAmount(Invoice invoice)
+		{
+			return invoice.Amount - invoice.AmountPaid;
+		}
+
+		private static decimal GetTotalPaymentAmount(Invoice invoice)
+		{
+			return invoice.Payments?.Sum(x => x.Amount) ?? 0;
 		}
 
 		private static string ProcessInvoiceWithZeroAmount(Invoice invoice)
