@@ -42,13 +42,8 @@ namespace RefactorThis.Domain
 		private static string ProcessInvoiceWithNonZeroAmount(Payment payment, Invoice invoice)
 		{
 			string responseMessage;
-			decimal totalPaymentAmount = 0;
+			var totalPaymentAmount = invoice.Payments?.Sum(x => x.Amount) ?? 0;
 			var remainingAmount = invoice.Amount - invoice.AmountPaid;
-			
-			if (invoice.Payments != null)
-			{
-				totalPaymentAmount = invoice.Payments.Sum(x => x.Amount);
-			}
 			
 			if ( totalPaymentAmount > 0 )
 			{
