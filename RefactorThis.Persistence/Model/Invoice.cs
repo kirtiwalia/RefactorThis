@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using RefactorThis.Persistence.Repository;
 
-namespace RefactorThis.Persistence
+namespace RefactorThis.Persistence.Model
 {
 	public class Invoice
 	{
