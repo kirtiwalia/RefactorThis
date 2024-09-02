@@ -1,0 +1,126 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\refactorthis\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|c:\\projects\\refactorthis\\refactorthis.domain\\services\\invoiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|solutionrelative:refactorthis.domain\\services\\invoiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|c:\\projects\\refactorthis\\refactorthis.domain\\extensions\\invoiceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|solutionrelative:refactorthis.domain\\extensions\\invoiceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|c:\\projects\\refactorthis\\refactorthis.domain\\services\\iinvoiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|solutionrelative:refactorthis.domain\\services\\iinvoiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7971BDEC-EAD1-4FB8-A4F5-B1F67E4F6355}|RefactorThis.Domain.Tests\\RefactorThis.Domain.Tests.csproj|c:\\projects\\refactorthis\\refactorthis.domain.tests\\invoicepaymentprocessortests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7971BDEC-EAD1-4FB8-A4F5-B1F67E4F6355}|RefactorThis.Domain.Tests\\RefactorThis.Domain.Tests.csproj|solutionrelative:refactorthis.domain.tests\\invoicepaymentprocessortests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50F3F93C-6688-4B4B-8B30-3BDF6FA4485F}|RefactorThis.Persistence\\RefactorThis.Persistence.csproj|c:\\projects\\refactorthis\\refactorthis.persistence\\repositories\\invoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50F3F93C-6688-4B4B-8B30-3BDF6FA4485F}|RefactorThis.Persistence\\RefactorThis.Persistence.csproj|solutionrelative:refactorthis.persistence\\repositories\\invoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50F3F93C-6688-4B4B-8B30-3BDF6FA4485F}|RefactorThis.Persistence\\RefactorThis.Persistence.csproj|c:\\projects\\refactorthis\\refactorthis.persistence\\repositories\\iinvoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50F3F93C-6688-4B4B-8B30-3BDF6FA4485F}|RefactorThis.Persistence\\RefactorThis.Persistence.csproj|solutionrelative:refactorthis.persistence\\repositories\\iinvoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InvoiceExtensions.cs",
+              "DocumentMoniker": "C:\\Projects\\refactorthis\\RefactorThis.Domain\\Extensions\\InvoiceExtensions.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Domain\\Extensions\\InvoiceExtensions.cs",
+              "ToolTip": "C:\\Projects\\refactorthis\\RefactorThis.Domain\\Extensions\\InvoiceExtensions.cs",
+              "RelativeToolTip": "RefactorThis.Domain\\Extensions\\InvoiceExtensions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-04T04:12:12.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InvoiceService.cs",
+              "DocumentMoniker": "C:\\Projects\\refactorthis\\RefactorThis.Domain\\Services\\InvoiceService.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Domain\\Services\\InvoiceService.cs",
+              "ToolTip": "C:\\Projects\\refactorthis\\RefactorThis.Domain\\Services\\InvoiceService.cs*",
+              "RelativeToolTip": "RefactorThis.Domain\\Services\\InvoiceService.cs*",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAowAMAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-04T04:00:14.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IInvoiceService.cs",
+              "DocumentMoniker": "C:\\Projects\\refactorthis\\RefactorThis.Domain\\Services\\IInvoiceService.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Domain\\Services\\IInvoiceService.cs",
+              "ToolTip": "C:\\Projects\\refactorthis\\RefactorThis.Domain\\Services\\IInvoiceService.cs",
+              "RelativeToolTip": "RefactorThis.Domain\\Services\\IInvoiceService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-04T04:00:11.795Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IInvoiceRepository.cs",
+              "DocumentMoniker": "C:\\Projects\\refactorthis\\RefactorThis.Persistence\\Repositories\\IInvoiceRepository.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Persistence\\Repositories\\IInvoiceRepository.cs",
+              "ToolTip": "C:\\Projects\\refactorthis\\RefactorThis.Persistence\\Repositories\\IInvoiceRepository.cs",
+              "RelativeToolTip": "RefactorThis.Persistence\\Repositories\\IInvoiceRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-04T03:32:03.277Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InvoiceRepository.cs",
+              "DocumentMoniker": "C:\\Projects\\refactorthis\\RefactorThis.Persistence\\Repositories\\InvoiceRepository.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Persistence\\Repositories\\InvoiceRepository.cs",
+              "ToolTip": "C:\\Projects\\refactorthis\\RefactorThis.Persistence\\Repositories\\InvoiceRepository.cs",
+              "RelativeToolTip": "RefactorThis.Persistence\\Repositories\\InvoiceRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-04T03:30:48.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InvoicePaymentProcessorTests.cs",
+              "DocumentMoniker": "C:\\Projects\\refactorthis\\RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "ToolTip": "C:\\Projects\\refactorthis\\RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "RelativeToolTip": "RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAB0AAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-02T01:29:02.805Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
