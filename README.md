@@ -23,4 +23,41 @@ The overall objective is to refactor the code and keep the tests passing.  There
 * Let your hiring rep know your refactoring task is ready for review.
 
 
+---------------------------------
+
+## Summary
+* In this code refactoring, I hope to follow the principles of Clean Architecture to make the code clearer, more maintainable, and easier to extend. However, since the project does not allow the addition of new files, I can only define the interface (IInvoiceRepository) inside InvoiceRepository instead of creating a new file separately.
+
+## Problems
+* InvoiceService has complex logic：
+    * The ProcessPayment method is too long and has too many nested if-else statements.
+    * InvoiceService depends directly on InvoiceRepository and does not use interfaces, making it difficult to test.
+    * The mutual dependency problem between Invoice and InvoiceRepository.
+
+* InvoiceRepository has a design flaw:：
+    * Can only store one Invoice, not suitable for real business scenarios.
+    * The GetInvoice method cannot correctly return the Invoice corresponding to the Reference..etc
+
+* Invoice has no unique identifier (Reference)：
+    * In the business logic, Payment relies on Reference to find Invoice, but Invoice itself does not have a    Reference attribute, resulting in confusion in data access.
+
+* Test code is unstable：
+    * Direct dependency on InvoiceRepository causes the test to not run independently.
+
+
+
+## Solution
+* Split the ProcessPayment method into different small methods to avoid one method taking on too many    responsibilities.
+* Dependency inversion is performed through IInvoiceRepository, allowing different data storage methods to be replaced
+* InvoiceRepository inherits IInvoiceRepository to ensure that FakeInvoiceRepository can replace the real database for testing.
+* IInvoiceRepository only contains GetInvoice, SaveInvoice and Add to avoid unnecessary coupling.
+* InvoiceService depends on IInvoiceRepository instead of InvoiceRepository to improve testability.
+
+* Clean Code
+    * Split the ProcessPayment method:
+        * Extract the GetPaymentStatus method: avoid multiple if-else nesting.
+        * Extract ApplyPayment method: focus on payment logic and improve readability.
+        * Define PaymentStatus enumeration to make the logic clearer.
+    * Simplifying the InvoiceRepository：
+        * Use Dictionary<string, Invoice> with Reference as the key to ensure efficient query.
 
