@@ -22,14 +22,7 @@ namespace RefactorThis.Domain
 			
 			if ( inv.Amount == 0 )
 			{
-				if ( inv.Payments == null || !inv.Payments.Any( ) )
-				{
-					responseMessage = "no payment needed";
-				}
-				else
-				{
-					throw new InvalidOperationException( "The invoice is in an invalid state, it has an amount of 0 and it has payments." );
-				}
+				responseMessage = HandleZeroAmountInvoice(inv);
 			}
 			else
 			{
@@ -135,10 +128,22 @@ namespace RefactorThis.Domain
 				}
 			}
 			
-			
 			inv.Save();
 
 			return responseMessage;
+		}
+		
+		// processing invoices in the amount of 0
+		private string HandleZeroAmountInvoice(Invoice inv)
+		{
+			if (inv.Payments == null || !inv.Payments.Any())
+			{
+				return "no payment needed";
+			}
+			else
+			{
+				throw new InvalidOperationException("The invoice is in an invalid state, it has an amount of 0 and it has payments.");
+			}
 		}
 	}
 }
