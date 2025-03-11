@@ -30,51 +30,7 @@ namespace RefactorThis.Domain
 			}
 			else
 			{
-				if ( payment.Amount > inv.Amount )
-				{
-					responseMessage = "the payment is greater than the invoice amount";
-				}
-				else if ( inv.Amount == payment.Amount )
-				{
-					switch ( inv.Type )
-					{
-						case InvoiceType.Standard:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add( payment );
-							responseMessage = "invoice is now fully paid";
-							break;
-						case InvoiceType.Commercial:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add( payment );
-							responseMessage = "invoice is now fully paid";
-							break;
-						default:
-							throw new ArgumentOutOfRangeException( );
-					}
-				}
-				else
-				{
-					switch ( inv.Type )
-					{
-						case InvoiceType.Standard:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add( payment );
-							responseMessage = "invoice is now partially paid";
-							break;
-						case InvoiceType.Commercial:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add( payment );
-							responseMessage = "invoice is now partially paid";
-							break;
-						default:
-							throw new ArgumentOutOfRangeException( );
-					}
-				}
-				
+				responseMessage = HandleFirstPayment(inv, payment);
 			}
 			
 			inv.Save();
@@ -95,7 +51,7 @@ namespace RefactorThis.Domain
 			}
 		}
 		
-		//Process existing payment records
+		// processing existing payment records
 		private string HandleSubsequentPayments(Invoice inv, Payment payment)
 		{
 			if (inv.Payments.Sum(x => x.Amount) != 0 && inv.Amount == inv.Payments.Sum(x => x.Amount))
@@ -141,6 +97,53 @@ namespace RefactorThis.Domain
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
+				}
+			}
+		}
+		
+		// processing first payment
+		private string HandleFirstPayment(Invoice inv, Payment payment)
+		{
+			if ( payment.Amount > inv.Amount )
+			{
+				return "the payment is greater than the invoice amount";
+			}
+			else if ( inv.Amount == payment.Amount )
+			{
+				switch ( inv.Type )
+				{
+					case InvoiceType.Standard:
+						inv.AmountPaid = payment.Amount;
+						inv.TaxAmount = payment.Amount * 0.14m;
+						inv.Payments.Add( payment );
+						return "invoice is now fully paid";
+						break;
+					case InvoiceType.Commercial:
+						inv.AmountPaid = payment.Amount;
+						inv.TaxAmount = payment.Amount * 0.14m;
+						inv.Payments.Add( payment );
+						return "invoice is now fully paid";
+						break;
+					default:
+						throw new ArgumentOutOfRangeException( );
+				}
+			}
+			else
+			{
+				switch ( inv.Type )
+				{
+					case InvoiceType.Standard:
+						inv.AmountPaid = payment.Amount;
+						inv.TaxAmount = payment.Amount * 0.14m;
+						inv.Payments.Add( payment );
+						return "invoice is now partially paid";
+					case InvoiceType.Commercial:
+						inv.AmountPaid = payment.Amount;
+						inv.TaxAmount = payment.Amount * 0.14m;
+						inv.Payments.Add( payment );
+						return "invoice is now partially paid";
+					default:
+						throw new ArgumentOutOfRangeException( );
 				}
 			}
 		}
