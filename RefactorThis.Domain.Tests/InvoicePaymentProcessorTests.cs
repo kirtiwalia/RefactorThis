@@ -1,247 +1,256 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Moq;
+using RefactorThis.Domain.Services;
 using RefactorThis.Persistence;
+using RefactorThis.Persistence.Entities;
+using RefactorThis.Persistence.Repositories;
+using RefactorThis.Domain.Services.Interface;
 
 namespace RefactorThis.Domain.Tests
 {
-	[TestFixture]
-	public class InvoicePaymentProcessorTests
-	{
-		[Test]
-		public void ProcessPayment_Should_ThrowException_When_NoInoiceFoundForPaymentReference( )
-		{
-			var repo = new InvoiceRepository( );
+    [TestFixture]
+    public class InvoicePaymentProcessorTests
+    {
+        private IInvoiceRepository _invoiceRepository;
+        private IInvoiceService _invoiceService;
 
-			Invoice invoice = null;
-			var paymentProcessor = new InvoiceService( repo );
+        [SetUp]
+        public void Initialize()
+        {
+            var invoiceRepositoryMock = new Mock<InvoiceRepository>();
+            _invoiceRepository = invoiceRepositoryMock.Object;
 
-			var payment = new Payment( );
-			var failureMessage = "";
+            var invoiceServiceMock = new Mock<InvoiceService>(_invoiceRepository);
+            _invoiceService = invoiceServiceMock.Object;
+        }
 
-			try
-			{
-				var result = paymentProcessor.ProcessPayment( payment );
-			}
-			catch ( InvalidOperationException e )
-			{
-				failureMessage = e.Message;
-			}
+        [Test]
+        public void ProcessPayment_Should_ThrowException_When_NoInoiceFoundForPaymentReference()
+        {
+            Invoice invoice = null;
+            var payment = new Payment();
+            var failureMessage = "";
 
-			Assert.AreEqual( "There is no invoice matching this payment", failureMessage );
-		}
+            try
+            {
+                var result = _invoiceService.ProcessPayment(payment);
+            }
+            catch (InvalidOperationException e)
+            {
+                failureMessage = e.Message;
+            }
 
-		[Test]
-		public void ProcessPayment_Should_ReturnFailureMessage_When_NoPaymentNeeded( )
-		{
-			var repo = new InvoiceRepository( );
+            Assert.AreEqual("There is no invoice matching this payment", failureMessage);
+        }
 
-			var invoice = new Invoice( repo )
-			{
-				Amount = 0,
-				AmountPaid = 0,
-				Payments = null
-			};
+        [Test]
+        public void ProcessPayment_Should_ReturnFailureMessage_When_NoPaymentNeeded()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 0,
+                AmountPaid = 0,
+                Payments = null
+            };
 
-			repo.Add( invoice );
+            _invoiceRepository.Add(invoice);
 
-			var paymentProcessor = new InvoiceService( repo );
+            var payment = new Payment();
 
-			var payment = new Payment( );
+            var result = _invoiceService.ProcessPayment(payment);
 
-			var result = paymentProcessor.ProcessPayment( payment );
+            Assert.AreEqual("no payment needed", result);
+        }
 
-			Assert.AreEqual( "no payment needed", result );
-		}
+        [Test]
+        public void ProcessPayment_Should_ReturnFailureMessage_When_InvoiceAlreadyFullyPaid()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 10,
+                Payments = new List<Payment>
+                {
+                    new Payment
+                    {
+                        Amount = 10
+                    }
+                }
+            };
+            _invoiceRepository.Add(invoice);
 
-		[Test]
-		public void ProcessPayment_Should_ReturnFailureMessage_When_InvoiceAlreadyFullyPaid( )
-		{
-			var repo = new InvoiceRepository( );
+            var payment = new Payment();
 
-			var invoice = new Invoice( repo )
-			{
-				Amount = 10,
-				AmountPaid = 10,
-				Payments = new List<Payment>
-				{
-					new Payment
-					{
-						Amount = 10
-					}
-				}
-			};
-			repo.Add( invoice );
+            var result = _invoiceService.ProcessPayment(payment);
 
-			var paymentProcessor = new InvoiceService( repo );
+            Assert.AreEqual("invoice was already fully paid", result);
+        }
 
-			var payment = new Payment( );
+        [Test]
+        public void ProcessPayment_Should_ReturnFailureMessage_When_PartialPaymentExistsAndAmountPaidExceedsAmountDue()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 5,
+                Payments = new List<Payment>
+                {
+                    new Payment
+                    {
+                        Amount = 5
+                    }
+                }
+            };
+            _invoiceRepository.Add(invoice);
 
-			var result = paymentProcessor.ProcessPayment( payment );
+            var payment = new Payment()
+            {
+                Amount = 6
+            };
 
-			Assert.AreEqual( "invoice was already fully paid", result );
-		}
+            var result = _invoiceService.ProcessPayment(payment);
 
-		[Test]
-		public void ProcessPayment_Should_ReturnFailureMessage_When_PartialPaymentExistsAndAmountPaidExceedsAmountDue( )
-		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
-			{
-				Amount = 10,
-				AmountPaid = 5,
-				Payments = new List<Payment>
-				{
-					new Payment
-					{
-						Amount = 5
-					}
-				}
-			};
-			repo.Add( invoice );
+            Assert.AreEqual("the payment is greater than the partial amount remaining", result);
+        }
 
-			var paymentProcessor = new InvoiceService( repo );
+        [Test]
+        public void ProcessPayment_Should_ReturnFailureMessage_When_NoPartialPaymentExistsAndAmountPaidExceedsInvoiceAmount()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 5,
+                AmountPaid = 0,
+                Payments = new List<Payment>()
+            };
+            _invoiceRepository.Add(invoice);
 
-			var payment = new Payment( )
-			{
-				Amount = 6
-			};
+            var payment = new Payment()
+            {
+                Amount = 6
+            };
 
-			var result = paymentProcessor.ProcessPayment( payment );
+            var result = _invoiceService.ProcessPayment(payment);
 
-			Assert.AreEqual( "the payment is greater than the partial amount remaining", result );
-		}
+            Assert.AreEqual("the payment is greater than the invoice amount", result);
+        }
 
-		[Test]
-		public void ProcessPayment_Should_ReturnFailureMessage_When_NoPartialPaymentExistsAndAmountPaidExceedsInvoiceAmount( )
-		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
-			{
-				Amount = 5,
-				AmountPaid = 0,
-				Payments = new List<Payment>( )
-			};
-			repo.Add( invoice );
+        [Test]
+        public void ProcessPayment_Should_ReturnFullyPaidMessage_When_PartialPaymentExistsAndAmountPaidEqualsAmountDue()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 5,
+                Payments = new List<Payment>
+                {
+                    new Payment
+                    {
+                        Amount = 5
+                    }
+                }
+            };
+            _invoiceRepository.Add(invoice);
 
-			var paymentProcessor = new InvoiceService( repo );
+            var payment = new Payment()
+            {
+                Amount = 5
+            };
 
-			var payment = new Payment( )
-			{
-				Amount = 6
-			};
+            var result = _invoiceService.ProcessPayment(payment);
 
-			var result = paymentProcessor.ProcessPayment( payment );
+            Assert.AreEqual("final partial payment received, invoice is now fully paid", result);
+        }
 
-			Assert.AreEqual( "the payment is greater than the invoice amount", result );
-		}
+        [Test]
+        public void ProcessPayment_Should_ReturnFullyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidEqualsInvoiceAmount()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 0,
+                Payments = new List<Payment>() { new Payment() { Amount = 10 } }
+            };
+            _invoiceRepository.Add(invoice);
 
-		[Test]
-		public void ProcessPayment_Should_ReturnFullyPaidMessage_When_PartialPaymentExistsAndAmountPaidEqualsAmountDue( )
-		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
-			{
-				Amount = 10,
-				AmountPaid = 5,
-				Payments = new List<Payment>
-				{
-					new Payment
-					{
-						Amount = 5
-					}
-				}
-			};
-			repo.Add( invoice );
+            var payment = new Payment()
+            {
+                Amount = 10
+            };
 
-			var paymentProcessor = new InvoiceService( repo );
+            var result = _invoiceService.ProcessPayment(payment);
 
-			var payment = new Payment( )
-			{
-				Amount = 5
-			};
+            Assert.AreEqual("invoice was already fully paid", result);
+        }
 
-			var result = paymentProcessor.ProcessPayment( payment );
+        [Test]
+        public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_PartialPaymentExistsAndAmountPaidIsLessThanAmountDue()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 5,
+                Payments = new List<Payment>
+                {
+                    new Payment
+                    {
+                        Amount = 5
+                    }
+                }
+            };
+            _invoiceRepository.Add(invoice);
 
-			Assert.AreEqual( "final partial payment received, invoice is now fully paid", result );
-		}
+            var payment = new Payment()
+            {
+                Amount = 1
+            };
 
-		[Test]
-		public void ProcessPayment_Should_ReturnFullyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidEqualsInvoiceAmount( )
-		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
-			{
-				Amount = 10,
-				AmountPaid = 0,
-				Payments = new List<Payment>( ) { new Payment( ) { Amount = 10 } }
-			};
-			repo.Add( invoice );
+            var result = _invoiceService.ProcessPayment(payment);
 
-			var paymentProcessor = new InvoiceService( repo );
+            Assert.AreEqual("another partial payment received, still not fully paid", result);
+        }
 
-			var payment = new Payment( )
-			{
-				Amount = 10
-			};
+        [Test]
+        public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidIsLessThanInvoiceAmount()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 0,
+                Payments = new List<Payment>()
+            };
+            _invoiceRepository.Add(invoice);
 
-			var result = paymentProcessor.ProcessPayment( payment );
+            var payment = new Payment()
+            {
+                Amount = 1
+            };
 
-			Assert.AreEqual( "invoice was already fully paid", result );
-		}
+            var result = _invoiceService.ProcessPayment(payment);
 
-		[Test]
-		public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_PartialPaymentExistsAndAmountPaidIsLessThanAmountDue( )
-		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
-			{
-				Amount = 10,
-				AmountPaid = 5,
-				Payments = new List<Payment>
-				{
-					new Payment
-					{
-						Amount = 5
-					}
-				}
-			};
-			repo.Add( invoice );
+            Assert.AreEqual("invoice is now partially paid", result);
+        }
 
-			var paymentProcessor = new InvoiceService( repo );
+        [Test]
+        public void ProcessPayment_Should_ReturnFullyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidIsEqualToInvoiceAmount()
+        {
+            var invoice = new Invoice()
+            {
+                Amount = 10,
+                AmountPaid = 0,
+                Payments = new List<Payment>()
+            };
+            _invoiceRepository.Add(invoice);
 
-			var payment = new Payment( )
-			{
-				Amount = 1
-			};
+            var payment = new Payment()
+            {
+                Amount = 10
+            };
 
-			var result = paymentProcessor.ProcessPayment( payment );
+            var result = _invoiceService.ProcessPayment(payment);
 
-			Assert.AreEqual( "another partial payment received, still not fully paid", result );
-		}
-
-		[Test]
-		public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidIsLessThanInvoiceAmount( )
-		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
-			{
-				Amount = 10,
-				AmountPaid = 0,
-				Payments = new List<Payment>( )
-			};
-			repo.Add( invoice );
-
-			var paymentProcessor = new InvoiceService( repo );
-
-			var payment = new Payment( )
-			{
-				Amount = 1
-			};
-
-			var result = paymentProcessor.ProcessPayment( payment );
-
-			Assert.AreEqual( "invoice is now partially paid", result );
-		}
-	}
+            Assert.AreEqual("invoice is now fully paid", result);
+        }
+    }
 }
