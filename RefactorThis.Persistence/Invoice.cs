@@ -1,25 +1,21 @@
+using System;
 using System.Collections.Generic;
 
 namespace RefactorThis.Persistence
 {
 	public class Invoice
 	{
-		private readonly InvoiceRepository _repository;
-		public Invoice( InvoiceRepository repository )
-		{
-			_repository = repository;
-		}
+        public Invoice()
+        {
+            Id = Guid.NewGuid();
+			Payments = new List<Payment>();
+        }
 
-		public void Save( )
-		{
-			_repository.SaveInvoice( this );
-		}
-
+        public Guid Id { get; private set; }
 		public decimal Amount { get; set; }
 		public decimal AmountPaid { get; set; }
 		public decimal TaxAmount { get; set; }
 		public List<Payment> Payments { get; set; }
-		
 		public InvoiceType Type { get; set; }
 	}
 

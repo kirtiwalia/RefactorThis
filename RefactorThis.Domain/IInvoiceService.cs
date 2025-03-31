@@ -9,6 +9,7 @@ namespace RefactorThis.Domain
 {
     public interface IInvoiceService
     {
-        string ProcessPayment(Payment payment);
+        PaymentResult ProcessPayment(Payment payment);
+
     }
 }
