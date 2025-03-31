@@ -1,8 +1,10 @@
+using System;
+
 namespace RefactorThis.Persistence
 {
 	public class Payment
 	{
 		public decimal Amount { get; set; }
-		public string Reference { get; set; }
+		public Guid InvoiceId { get; set; }
 	}
 }

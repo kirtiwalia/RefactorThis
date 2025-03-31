@@ -1,21 +1,25 @@
-namespace RefactorThis.Persistence {
-	public class InvoiceRepository
-	{
-		private Invoice _invoice;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-		public Invoice GetInvoice( string reference )
+namespace RefactorThis.Persistence {
+	public class InvoiceRepository : IInvoiceRepository
+	{
+		private readonly IList<Invoice> _invoice;
+
+		public InvoiceRepository()
 		{
-			return _invoice;
+			_invoice = new List<Invoice>();
+		}
+
+		public Invoice GetInvoice( Guid id )
+		{
+			return _invoice.FirstOrDefault( x => x.Id == id );
 		}
 
 		public void SaveInvoice( Invoice invoice )
 		{
-			//saves the invoice to the database
-		}
-
-		public void Add( Invoice invoice )
-		{
-			_invoice = invoice;
+			_invoice.Add(invoice);
 		}
 	}
 }
