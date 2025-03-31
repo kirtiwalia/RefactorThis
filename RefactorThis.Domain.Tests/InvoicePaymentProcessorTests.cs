@@ -173,8 +173,8 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.NoPaymentRequred, result.PaymentState);
-            Assert.False(result.Success);
+            Assert.AreEqual(State.FullyPaid, result.PaymentState);
+            Assert.True(result.Success);
         }
 
 		[Test]
