@@ -4,7 +4,7 @@ using RefactorThis.Persistence;
 
 namespace RefactorThis.Domain
 {
-	public class InvoiceService
+	public class InvoiceService : IInvoiceService
 	{
 		private readonly InvoiceRepository _invoiceRepository;
 
