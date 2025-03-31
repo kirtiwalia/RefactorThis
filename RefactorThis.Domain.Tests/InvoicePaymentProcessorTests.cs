@@ -36,7 +36,7 @@ namespace RefactorThis.Domain.Tests
 				AmountPaid = 0,
 			};
 
-            repo.SaveInvoice( invoice );
+repo.SaveInvoice( invoice );
 
 			var paymentProcessor = new InvoiceService( repo );
 
@@ -45,10 +45,10 @@ namespace RefactorThis.Domain.Tests
 			var result = paymentProcessor.ProcessPayment( payment );
 
 			Assert.AreEqual(State.NoPaymentRequred, result.PaymentState);
-            Assert.False(result.Success);
-        }
+Assert.False(result.Success);
+}
 
-        [Test]
+[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_InvoiceAlreadyFullyPaid( )
 		{
 			var repo = new InvoiceRepository( );
@@ -58,9 +58,9 @@ namespace RefactorThis.Domain.Tests
 				Amount = 10,
 				AmountPaid = 10
 			};
-            invoice.Payments.Add(new Payment { Amount = 10, InvoiceId = invoice.Id });
+invoice.Payments.Add(new Payment { Amount = 10, InvoiceId = invoice.Id });
 
-            repo.SaveInvoice( invoice );
+repo.SaveInvoice( invoice );
 
 			var paymentProcessor = new InvoiceService( repo );
 
@@ -68,9 +68,9 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.NoPaymentRequred, result.PaymentState);
-            Assert.False(result.Success);
-        }
+Assert.AreEqual(State.NoPaymentRequred, result.PaymentState);
+Assert.False(result.Success);
+}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_PartialPaymentExistsAndAmountPaidExceedsAmountDue( )
@@ -89,14 +89,14 @@ namespace RefactorThis.Domain.Tests
 			var payment = new Payment( )
 			{
 				Amount = 6,
-                InvoiceId = invoice.Id
-            };
+InvoiceId = invoice.Id
+};
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.GreaterThanRemainder, result.PaymentState);
-            Assert.False(result.Success);
-        }
+Assert.AreEqual(State.GreaterThanRemainder, result.PaymentState);
+Assert.False(result.Success);
+}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_NoPartialPaymentExistsAndAmountPaidExceedsInvoiceAmount( )
@@ -119,9 +119,9 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.GreaterThanRemainder, result.PaymentState);
-            Assert.False(result.Success);
-        }
+Assert.AreEqual(State.GreaterThanRemainder, result.PaymentState);
+Assert.False(result.Success);
+}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnFullyPaidMessage_When_PartialPaymentExistsAndAmountPaidEqualsAmountDue( )
@@ -132,23 +132,23 @@ namespace RefactorThis.Domain.Tests
 				Amount = 10,
 				AmountPaid = 5
 			};
-            invoice.Payments.Add(new Payment() { Amount = 5 });
+invoice.Payments.Add(new Payment() { Amount = 5 });
 
-            repo.SaveInvoice( invoice );
+repo.SaveInvoice( invoice );
 
 			var paymentProcessor = new InvoiceService( repo );
 
 			var payment = new Payment( )
 			{
 				Amount = 5,
-                InvoiceId = invoice.Id
-            };
+InvoiceId = invoice.Id
+};
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.FullyPaid, result.PaymentState);
-            Assert.True(result.Success);
-        }
+Assert.AreEqual(State.FullyPaid, result.PaymentState);
+Assert.True(result.Success);
+}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnFullyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidEqualsInvoiceAmount( )
@@ -159,23 +159,23 @@ namespace RefactorThis.Domain.Tests
 				Amount = 10,
 				AmountPaid = 0
 			};
-            invoice.Payments.Add(new Payment() { Amount = 10, InvoiceId = invoice.Id});
+invoice.Payments.Add(new Payment() { Amount = 10, InvoiceId = invoice.Id});
 
-            repo.SaveInvoice( invoice );
+repo.SaveInvoice( invoice );
 
 			var paymentProcessor = new InvoiceService( repo );
 
 			var payment = new Payment( )
 			{
 				Amount = 10,
-                InvoiceId = invoice.Id
-            };
+InvoiceId = invoice.Id
+};
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.FullyPaid, result.PaymentState);
-            Assert.True(result.Success);
-        }
+Assert.AreEqual(State.FullyPaid, result.PaymentState);
+Assert.True(result.Success);
+}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_PartialPaymentExistsAndAmountPaidIsLessThanAmountDue( )
@@ -186,23 +186,23 @@ namespace RefactorThis.Domain.Tests
 				Amount = 10,
 				AmountPaid = 5
 			};
-            invoice.Payments.Add(new Payment() { Amount = 5 });
+invoice.Payments.Add(new Payment() { Amount = 5 });
 
-            repo.SaveInvoice( invoice );
+repo.SaveInvoice( invoice );
 
 			var paymentProcessor = new InvoiceService( repo );
 
 			var payment = new Payment( )
 			{
 				Amount = 1,
-                InvoiceId = invoice.Id
-            };
+InvoiceId = invoice.Id
+};
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.PartialPaid, result.PaymentState);
-            Assert.True(result.Success);
-        }
+Assert.AreEqual(State.PartialPaid, result.PaymentState);
+Assert.True(result.Success);
+}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidIsLessThanInvoiceAmount( )
@@ -220,13 +220,13 @@ namespace RefactorThis.Domain.Tests
 			var payment = new Payment( )
 			{
 				Amount = 1,
-                InvoiceId = invoice.Id
-            };
+InvoiceId = invoice.Id
+};
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-            Assert.AreEqual(State.PartialPaid, result.PaymentState);
-            Assert.True(result.Success);
-        }
+Assert.AreEqual(State.PartialPaid, result.PaymentState);
+Assert.True(result.Success);
+}
 	}
 }
