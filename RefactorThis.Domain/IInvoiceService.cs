@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace RefactorThis.Domain
 {
-public interface IInvoiceService
-{
-PaymentResult ProcessPayment(Payment payment);
+    public interface IInvoiceService
+    {
+        PaymentResult ProcessPayment(Payment payment);
 
-}
+    }
 }
