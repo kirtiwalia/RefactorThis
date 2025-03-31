@@ -23,14 +23,14 @@ namespace RefactorThis.Domain
 			}
 
 			if (inv.Amount == 0 && !inv.Payments.Any())
-            {
-                return new PaymentResult(false, State.NoPaymentRequred);
+			{
+				return new PaymentResult(false, State.NoPaymentRequred);
 			}
 
-            if (inv.Amount == 0 && inv.Payments.Any())
+			if (inv.Amount == 0 && inv.Payments.Any())
 			{
-                return new PaymentResult(false, State.InvalidState);
-            }
+				return new PaymentResult(false, State.InvalidState);
+			}
 
 			//
 			if (inv.AmountPaid == inv.Amount)
@@ -38,34 +38,34 @@ namespace RefactorThis.Domain
 				return new PaymentResult(false, State.NoPaymentRequred);
 			}
 
-            if (inv.AmountPaid > inv.Amount)
+			if (inv.AmountPaid > inv.Amount)
 			{
-                return new PaymentResult(false, State.OverPaid);
-            }
+				return new PaymentResult(false, State.OverPaid);
+			}
 
 			if (payment.Amount > inv.Amount - inv.AmountPaid)
 			{
-                return new PaymentResult(false, State.GreaterThanRemainder);
-            }
+				return new PaymentResult(false, State.GreaterThanRemainder);
+			}
 
-            switch (inv.Type)
-            {
-                case InvoiceType.Standard:
-                    inv.AmountPaid += payment.Amount;
+			switch (inv.Type)
+			{
+				case InvoiceType.Standard:
+					inv.AmountPaid += payment.Amount;
 					if (!inv.Payments.Any())
 					{
-                        inv.TaxAmount = payment.Amount * 0.14m;
-                    }
-                    inv.Payments.Add(payment);
-                    break;
-                case InvoiceType.Commercial:
-                    inv.AmountPaid += payment.Amount;
-                    inv.TaxAmount += payment.Amount * 0.14m;
-                    inv.Payments.Add(payment);
-                    break;
-                default:
+						inv.TaxAmount = payment.Amount * 0.14m;
+					}
+					inv.Payments.Add(payment);
+					break;
+				case InvoiceType.Commercial:
+					inv.AmountPaid += payment.Amount;
+					inv.TaxAmount += payment.Amount * 0.14m;
+					inv.Payments.Add(payment);
+					break;
+				default:
 					return new PaymentResult(false, State.Error);
-            }
+			}
 
 			if (inv.Amount == inv.AmountPaid)
 			{
@@ -77,9 +77,9 @@ namespace RefactorThis.Domain
 				return new PaymentResult(true, State.PartialPaid);
 			}
 
-            _invoiceRepository.SaveInvoice(inv);
+			_invoiceRepository.SaveInvoice(inv);
 
-            return new PaymentResult(false, State.Error);
+			return new PaymentResult(false, State.Error);
 		}
 	}
 }

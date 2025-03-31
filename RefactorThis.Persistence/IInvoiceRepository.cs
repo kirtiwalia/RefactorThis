@@ -2,9 +2,9 @@
 
 namespace RefactorThis.Persistence
 {
-    public interface IInvoiceRepository
-    {
-        Invoice GetInvoice(Guid id);
-        void SaveInvoice(Invoice invoice);
-    }
+	public interface IInvoiceRepository
+	{
+		Invoice GetInvoice(Guid id);
+		void SaveInvoice(Invoice invoice);
+	}
 }
