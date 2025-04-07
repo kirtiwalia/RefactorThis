@@ -38,8 +38,13 @@
 		<Reference Include="System.Xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="InvoiceService.cs" />
+		<Compile Include="Constants.cs" />
+		<Compile Include="Models\PaymentResult.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
+		<Compile Include="Services\Invoices\IInvoiceService.cs" />
+		<Compile Include="Services\Invoices\InvoiceService.cs" />
+		<Compile Include="Services\Payments\IPaymentService.cs" />
+		<Compile Include="Services\Payments\PaymentService.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\RefactorThis.Persistence\RefactorThis.Persistence.csproj">
