@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
 using RefactorThis.Persistence.Entities;
+using RefactorThis.Persistence.Enums;
 using RefactorThis.Persistence.Repositories;
 
-namespace RefactorThis.Domain
+namespace RefactorThis.Domain.Services
 {
     public class InvoiceService
 	{
@@ -141,8 +142,8 @@ namespace RefactorThis.Domain
 					}
 				}
 			}
-			
-			inv.Save();
+
+            _invoiceRepository.SaveInvoice(inv);
 
 			return responseMessage;
 		}
