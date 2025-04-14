@@ -50,9 +50,16 @@ namespace RefactorThis.Domain.Services
             if (inv.Payments.Sum(x => x.Amount) != 0 && payment.Amount > (inv.Amount - inv.AmountPaid))
             {
 				return true;
-                //responseMessage = "the payment is greater than the partial amount remaining";
             }
             return false;
+        }
+		private bool CheckPaymentHistory(Invoice inv)
+		{
+            if (inv.Payments != null && inv.Payments.Any())
+			{
+				return true;
+			}
+			return false;
         }
 
 		private void CalculatePayment(Invoice inv, Payment payment)
@@ -79,60 +86,57 @@ namespace RefactorThis.Domain.Services
 
 			if (CheckInvoiceIsZero(inv))
 			{
-				responseMessage = "no payment needed";
-				return responseMessage;
+				return "no payment needed";
 			}
 
-
-			if (inv.Payments != null && inv.Payments.Any())
+			if (CheckPaymentHistory(inv))
 			{
 				if (CheckInvoiceIsPaid(inv))
 				{
-                    responseMessage = "invoice was already fully paid";
-                    return responseMessage;
-                }
+                    return "invoice was already fully paid";                              
+				}
                 
 				if (CheckInvoiceOverpaid(inv, payment))
                 {
-					responseMessage = "the payment is greater than the partial amount remaining";
-					return responseMessage;
+					return "the payment is greater than the partial amount remaining";
                 }
 
-				if ((inv.Amount - inv.AmountPaid) == payment.Amount)
+                if ((inv.Amount - inv.AmountPaid) == payment.Amount)
 				{
-					CalculatePayment(inv, payment);
-                    responseMessage = "final partial payment received, invoice is now fully paid";
+                    CalculatePayment(inv, payment);
+                    return "final partial payment received, invoice is now fully paid";
                 }
 				else
 				{
                     CalculatePayment(inv, payment);
-                    responseMessage = "another partial payment received, still not fully paid";
+                    return "another partial payment received, still not fully paid";
 				}
 			}
+
+            if (payment.Amount > inv.Amount){ 
+                return "the payment is greater than the invoice amount"; 
+            }
+
+            try
+            {
+                inv.AmountPaid = payment.Amount;
+                inv.TaxAmount = payment.Amount * 0.14m;
+                inv.Payments.Add(payment);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            if (inv.Amount == payment.Amount)
+			{
+                responseMessage = "invoice is now fully paid";
+            }
 			else
 			{
-				if (payment.Amount > inv.Amount)	return "the payment is greater than the invoice amount";
-
-                try
-                {
-                    inv.AmountPaid = payment.Amount;
-                    inv.TaxAmount = payment.Amount * 0.14m;
-                    inv.Payments.Add(payment);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                if (inv.Amount == payment.Amount)
-				{
-                    responseMessage = "invoice is now fully paid";
-                }
-				else
-				{
-					responseMessage = "invoice is now partially paid";
-				}
+				responseMessage = "invoice is now partially paid";
 			}
+			
 
             _invoiceRepository.SaveInvoice(inv);
 
