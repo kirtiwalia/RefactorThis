@@ -29,16 +29,14 @@ namespace RefactorThis.Domain.Services
                 {
                     return true;
                 }
-                else
-                {
-                    throw new InvalidOperationException("The invoice is in an invalid state, it has an amount of 0 and it has payments.");
-                }
+                throw new InvalidOperationException("The invoice is in an invalid state, it has an amount of 0 and it has payments.");
             }
 			return false;
         }
 		private bool CheckInvoiceIsPaid(Invoice inv)
 		{
-            if (inv.Payments.Sum(x => x.Amount) != 0 && inv.Amount == inv.Payments.Sum(x => x.Amount))
+            var paymentSum = inv.Payments.Sum(x => x.Amount);
+            if (paymentSum != 0 && inv.Amount == paymentSum)
             {
 				return true;
             }
@@ -46,7 +44,6 @@ namespace RefactorThis.Domain.Services
         }
 		private bool CheckInvoiceOverpaid(Invoice inv, Payment payment)
 		{
-
             if (inv.Payments.Sum(x => x.Amount) != 0 && payment.Amount > (inv.Amount - inv.AmountPaid))
             {
 				return true;
