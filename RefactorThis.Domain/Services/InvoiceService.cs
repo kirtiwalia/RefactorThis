@@ -69,11 +69,27 @@ namespace RefactorThis.Domain.Services
 				inv.AmountPaid += payment.Amount;
 				if (inv.Type == InvoiceType.Commercial) inv.TaxAmount += payment.Amount * 0.14m;
 				inv.Payments.Add(payment);
-			}
-			catch (Exception)
+                _invoiceRepository.SaveInvoice(inv);
+            }
+            catch (Exception)
 			{
 				throw new ArgumentOutOfRangeException();
 			}
+        }
+
+        private void CalculateFirstPayment(Invoice inv, Payment payment)
+		{
+            try
+            {
+                inv.AmountPaid = payment.Amount;
+                inv.TaxAmount = payment.Amount * 0.14m;
+                inv.Payments.Add(payment);
+                _invoiceRepository.SaveInvoice(inv);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
         }
 
         public string ProcessPayment( Payment payment )
@@ -117,31 +133,16 @@ namespace RefactorThis.Domain.Services
                 return "the payment is greater than the invoice amount"; 
             }
 
-            try
-            {
-                inv.AmountPaid = payment.Amount;
-                inv.TaxAmount = payment.Amount * 0.14m;
-                inv.Payments.Add(payment);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            CalculateFirstPayment(inv, payment);
 
             if (inv.Amount == payment.Amount)
 			{
-                responseMessage = "invoice is now fully paid";
+                return "invoice is now fully paid";
             }
 			else
 			{
-				responseMessage = "invoice is now partially paid";
+				return "invoice is now partially paid";
 			}
-			
-
-            _invoiceRepository.SaveInvoice(inv);
-
-			return responseMessage;
 		}
-
     }
 }
