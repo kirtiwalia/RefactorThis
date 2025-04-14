@@ -117,14 +117,14 @@ namespace RefactorThis.Domain.Services
 					return "the payment is greater than the partial amount remaining";
                 }
 
-                if ((inv.Amount - inv.AmountPaid) == payment.Amount)
+                CalculatePayment(inv, payment);
+               
+                if (inv.AmountPaid == inv.Amount)
 				{
-                    CalculatePayment(inv, payment);
                     return "final partial payment received, invoice is now fully paid";
                 }
 				else
 				{
-                    CalculatePayment(inv, payment);
                     return "another partial payment received, still not fully paid";
 				}
 			}
