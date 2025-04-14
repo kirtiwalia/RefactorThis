@@ -111,49 +111,26 @@ namespace RefactorThis.Domain.Services
 			}
 			else
 			{
-				if (payment.Amount > inv.Amount)
+				if (payment.Amount > inv.Amount)	return "the payment is greater than the invoice amount";
+
+                try
+                {
+                    inv.AmountPaid = payment.Amount;
+                    inv.TaxAmount = payment.Amount * 0.14m;
+                    inv.Payments.Add(payment);
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                if (inv.Amount == payment.Amount)
 				{
-					responseMessage = "the payment is greater than the invoice amount";
-				}
-				else if (inv.Amount == payment.Amount)
-				{
-					switch (inv.Type)
-					{
-						case InvoiceType.Standard:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add(payment);
-							responseMessage = "invoice is now fully paid";
-							break;
-						case InvoiceType.Commercial:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add(payment);
-							responseMessage = "invoice is now fully paid";
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				}
+                    responseMessage = "invoice is now fully paid";
+                }
 				else
 				{
-					switch (inv.Type)
-					{
-						case InvoiceType.Standard:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add(payment);
-							responseMessage = "invoice is now partially paid";
-							break;
-						case InvoiceType.Commercial:
-							inv.AmountPaid = payment.Amount;
-							inv.TaxAmount = payment.Amount * 0.14m;
-							inv.Payments.Add(payment);
-							responseMessage = "invoice is now partially paid";
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
+					responseMessage = "invoice is now partially paid";
 				}
 			}
 
