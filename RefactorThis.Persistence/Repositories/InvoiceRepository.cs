@@ -1,4 +1,4 @@
-using RefactorThis.Persistence.Entities;
+using RefactorThis.Persistence.Models;
 
 namespace RefactorThis.Persistence.Repositories
 {

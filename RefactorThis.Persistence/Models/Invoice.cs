@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RefactorThis.Persistence.Enums;
 
-namespace RefactorThis.Persistence.Entities
+namespace RefactorThis.Persistence.Models
 {
     public class Invoice
     {

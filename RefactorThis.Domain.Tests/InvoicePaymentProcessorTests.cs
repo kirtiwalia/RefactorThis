@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using RefactorThis.Domain.Services;
-using RefactorThis.Persistence.Entities;
+using RefactorThis.Persistence.Models;
 using RefactorThis.Persistence.Repositories;
 
 namespace RefactorThis.Domain.Tests

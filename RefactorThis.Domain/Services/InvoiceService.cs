@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using RefactorThis.Persistence.Entities;
 using RefactorThis.Persistence.Enums;
+using RefactorThis.Persistence.Models;
 using RefactorThis.Persistence.Repositories;
 
 namespace RefactorThis.Domain.Services
