@@ -1,0 +1,89 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\RefectorCode\\refactorthis\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7971BDEC-EAD1-4FB8-A4F5-B1F67E4F6355}|RefactorThis.Domain.Tests\\RefactorThis.Domain.Tests.csproj|e:\\refectorcode\\refactorthis\\refactorthis.domain.tests\\invoicepaymentprocessortests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7971BDEC-EAD1-4FB8-A4F5-B1F67E4F6355}|RefactorThis.Domain.Tests\\RefactorThis.Domain.Tests.csproj|solutionrelative:refactorthis.domain.tests\\invoicepaymentprocessortests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7971BDEC-EAD1-4FB8-A4F5-B1F67E4F6355}|RefactorThis.Domain.Tests\\RefactorThis.Domain.Tests.csproj|E:\\RefectorCode\\refactorthis\\refactorthis.domain.tests\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{7971BDEC-EAD1-4FB8-A4F5-B1F67E4F6355}|RefactorThis.Domain.Tests\\RefactorThis.Domain.Tests.csproj|solutionrelative:refactorthis.domain.tests\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|E:\\RefectorCode\\refactorthis\\refactorthis.domain\\services\\invoiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5310B2FE-E26D-414E-B656-1F74C5A70368}|RefactorThis.Domain\\RefactorThis.Domain.csproj|solutionrelative:refactorthis.domain\\services\\invoiceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50F3F93C-6688-4B4B-8B30-3BDF6FA4485F}|RefactorThis.Persistence\\RefactorThis.Persistence.csproj|e:\\refectorcode\\refactorthis\\refactorthis.persistence\\invoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50F3F93C-6688-4B4B-8B30-3BDF6FA4485F}|RefactorThis.Persistence\\RefactorThis.Persistence.csproj|solutionrelative:refactorthis.persistence\\invoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "packages.config",
+              "DocumentMoniker": "E:\\RefectorCode\\refactorthis\\RefactorThis.Domain.Tests\\packages.config",
+              "RelativeDocumentMoniker": "RefactorThis.Domain.Tests\\packages.config",
+              "ToolTip": "E:\\RefectorCode\\refactorthis\\RefactorThis.Domain.Tests\\packages.config",
+              "RelativeToolTip": "RefactorThis.Domain.Tests\\packages.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-04-30T02:45:21.69Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Invoice.cs",
+              "DocumentMoniker": "E:\\RefectorCode\\refactorthis\\RefactorThis.Persistence\\Invoice.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Persistence\\Invoice.cs",
+              "ToolTip": "E:\\RefectorCode\\refactorthis\\RefactorThis.Persistence\\Invoice.cs",
+              "RelativeToolTip": "RefactorThis.Persistence\\Invoice.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-30T00:32:33.339Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InvoicePaymentProcessorTests.cs",
+              "DocumentMoniker": "E:\\RefectorCode\\refactorthis\\RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "ToolTip": "E:\\RefectorCode\\refactorthis\\RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "RelativeToolTip": "RefactorThis.Domain.Tests\\InvoicePaymentProcessorTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-30T00:13:31.566Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "InvoiceService.cs",
+              "DocumentMoniker": "E:\\RefectorCode\\refactorthis\\RefactorThis.Domain\\Services\\InvoiceService.cs",
+              "RelativeDocumentMoniker": "RefactorThis.Domain\\Services\\InvoiceService.cs",
+              "ToolTip": "E:\\RefectorCode\\refactorthis\\RefactorThis.Domain\\Services\\InvoiceService.cs",
+              "RelativeToolTip": "RefactorThis.Domain\\Services\\InvoiceService.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAYwAUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-30T00:09:27.175Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
