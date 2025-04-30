@@ -9,28 +9,19 @@ namespace RefactorThis.Domain.Tests
 	public class InvoicePaymentProcessorTests
 	{
 		[Test]
-		public void ProcessPayment_Should_ThrowException_When_NoInoiceFoundForPaymentReference( )
+		public void ProcessPayment_Should_ThrowException_When_NoInvoiceFoundForPaymentReference( )
 		{
 			var repo = new InvoiceRepository( );
 
-			Invoice invoice = null;
 			var paymentProcessor = new InvoiceService( repo );
 
 			var payment = new Payment( );
-			var failureMessage = "";
 
-			try
-			{
-				var result = paymentProcessor.ProcessPayment( payment );
-			}
-			catch ( InvalidOperationException e )
-			{
-				failureMessage = e.Message;
-			}
+			var exception = Assert.Throws<InvalidOperationException>(() => paymentProcessor.ProcessPayment(payment));
 
-			Assert.AreEqual( "There is no invoice matching this payment", failureMessage );
+			Assert.AreEqual("There is no invoice matching this payment", exception.Message);
 		}
-
+		
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_NoPaymentNeeded( )
 		{
