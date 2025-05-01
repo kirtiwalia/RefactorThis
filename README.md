@@ -47,46 +47,53 @@ The overall objective is to refactor the code and keep the tests passing.  There
 
 * Client side, after:
 
-        PaymentResult result = _invoiceService.ProcessPayment(payment);
+      PaymentResult result = _invoiceService.ProcessPayment(payment);
 
-        if (result.IsSuccess)  
-        {
-            switch (result.Code)
-            {
-                case ResultCode.FullyPaid:
-                    _receiptService.Generate(invoice, result.AmountPaid);
-                    _auditService.LogPaymentComplete(result.TransactionId);
-                    break;
-        
-                case ResultCode.PartiallyPaid:
-                    _paymentTracker.ScheduleFollowUp(
-                        result.RemainingAmount,
-                        DateTime.Now.AddDays(7));
-                    break;
-                
-                // Other cases
-            }
-        }
-        else
-        {
-            // Handle failure scenarios
-            switch (result.Code)
-            {
-                case ResultCode.InsufficientFunds:
-                    _retryHandler.QueueRetry(payment);
-                    break;
-        
-                case ResultCode.InvalidPaymentMethod:
-                    _userNotifier.RequestPaymentMethodUpdate();
-                    break;
-                    
-                // Other cases
-        
-                default:
-                    _alertService.TriggerSupportAlert(result);
-                    break;
-            }
-        }
+      if (result.IsSuccess)
+      {
+          switch (result.Code)
+          {
+              case ResultCode.FinalPaymentComplete:
+              _receiptService.Generate(invoice, result.AmountPaid);
+              _auditService.LogPaymentComplete(result.TransactionId);
+              break;
+              
+              case ResultCode.PartialPaymentComplete:
+                  _paymentTracker.ScheduleFollowUp(
+                      result.RemainingAmount,
+                      DateTime.Now.AddDays(7));
+              break;
+      
+              case ResultCode.NoPaymentNeeded:
+              case ResultCode.AlreadyFullyPaid:
+                  // Handle these cases as needed
+                  break;
+          }
+      }
+      else
+      {
+          // Handle failure scenarios
+          switch (result.Code)
+          {
+              case ResultCode.InvoiceNotFound:
+              _alertService.TriggerSupportAlert(result);
+              break;
+              
+              case ResultCode.PaymentExceedsRemainingAmount:
+              case ResultCode.PaymentExceedsInvoiceAmount:
+                  // Handle these cases as needed
+              break;
+      
+              case ResultCode.ProcessingError:
+              case ResultCode.InvalidInvoiceState:
+                  // Handle these cases as needed
+              break;
+      
+              default:
+                  _alertService.TriggerSupportAlert(result);
+              break;
+          }
+      }
 
 *** Architectural improvements
 * Proper layering with domain entities, services, and persistence
