@@ -43,6 +43,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="InvoicePaymentProcessorTests.cs" />
+		<Compile Include="Mocks\MockInvoiceRepository.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
 	<ItemGroup>

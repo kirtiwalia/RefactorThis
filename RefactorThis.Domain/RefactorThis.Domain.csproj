@@ -32,20 +32,42 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
+		<Reference Include="mscorlib" />
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Data" />
+		<Reference Include="System.Linq, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+		  <HintPath>..\packages\System.Linq.4.3.0\lib\net463\System.Linq.dll</HintPath>
+		</Reference>
 		<Reference Include="System.Xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="InvoiceService.cs" />
+		<Compile Include="Exceptions\InvoiceValidationException.cs" />
+		<Compile Include="Loggers\AppLoggger.cs" />
+		<Compile Include="Loggers\IAppLogger.cs" />
+		<Compile Include="Models\PaymentResult.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
+		<Compile Include="Services\IInvoiceService.cs" />
+		<Compile Include="Services\InvoiceService.cs" />
+		<Compile Include="Validators\IInvoiceValidator.cs" />
+		<Compile Include="Validators\InvoiceValidator.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\RefactorThis.Persistence\RefactorThis.Persistence.csproj">
 	    <Project>{33cdc796-ff75-449c-9637-59c2efc46361}</Project>
 	    <Name>RefactorThis.Persistence</Name>
 	  </ProjectReference>
+	  <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.0-preview.3.25171.5" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.3.25171.5" />
+	  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+		<PackageReference Include="NUnit" Version="4.3.2" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="packages.config" />
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
