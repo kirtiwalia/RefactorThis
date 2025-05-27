@@ -13,7 +13,6 @@ namespace RefactorThis.Domain.Tests
 		{
 			var repo = new InvoiceRepository( );
 
-			Invoice invoice = null;
 			var paymentProcessor = new InvoiceService( repo );
 
 			var payment = new Payment( );
@@ -28,7 +27,7 @@ namespace RefactorThis.Domain.Tests
 				failureMessage = e.Message;
 			}
 
-			Assert.AreEqual( "There is no invoice matching this payment", failureMessage );
+			Assert.That(failureMessage, Is.EqualTo("There is no invoice matching this payment"));
 		}
 
 		[Test]
@@ -51,7 +50,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "no payment needed", result );
+			Assert.That("no payment needed", Is.EqualTo(result)); 
 		}
 
 		[Test]
@@ -63,13 +62,13 @@ namespace RefactorThis.Domain.Tests
 			{
 				Amount = 10,
 				AmountPaid = 10,
-				Payments = new List<Payment>
-				{
-					new Payment
+				Payments =
+                [
+                    new Payment
 					{
 						Amount = 10
 					}
-				}
+				]
 			};
 			repo.Add( invoice );
 
@@ -79,7 +78,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "invoice was already fully paid", result );
+			Assert.That( "invoice was already fully paid", Is.EqualTo(result) );
 		}
 
 		[Test]
@@ -90,13 +89,13 @@ namespace RefactorThis.Domain.Tests
 			{
 				Amount = 10,
 				AmountPaid = 5,
-				Payments = new List<Payment>
-				{
-					new Payment
+				Payments =
+                [
+                    new Payment
 					{
 						Amount = 5
 					}
-				}
+				]
 			};
 			repo.Add( invoice );
 
@@ -109,7 +108,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "the payment is greater than the partial amount remaining", result );
+			Assert.That( "the payment is greater than the partial amount remaining", Is.EqualTo(result) );
 		}
 
 		[Test]
@@ -120,7 +119,7 @@ namespace RefactorThis.Domain.Tests
 			{
 				Amount = 5,
 				AmountPaid = 0,
-				Payments = new List<Payment>( )
+				Payments = []
 			};
 			repo.Add( invoice );
 
@@ -133,7 +132,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "the payment is greater than the invoice amount", result );
+			Assert.That( "the payment is greater than the invoice amount", Is.EqualTo(result) );
 		}
 
 		[Test]
@@ -144,13 +143,13 @@ namespace RefactorThis.Domain.Tests
 			{
 				Amount = 10,
 				AmountPaid = 5,
-				Payments = new List<Payment>
-				{
-					new Payment
+				Payments =
+                [
+                    new Payment
 					{
 						Amount = 5
 					}
-				}
+				]
 			};
 			repo.Add( invoice );
 
@@ -163,7 +162,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "final partial payment received, invoice is now fully paid", result );
+			Assert.That( "final partial payment received, invoice is now fully paid", Is.EqualTo(result) );
 		}
 
 		[Test]
@@ -173,8 +172,8 @@ namespace RefactorThis.Domain.Tests
 			var invoice = new Invoice( repo )
 			{
 				Amount = 10,
-				AmountPaid = 0,
-				Payments = new List<Payment>( ) { new Payment( ) { Amount = 10 } }
+				AmountPaid = 10,
+				Payments = [new Payment( ) { Amount = 10 }]
 			};
 			repo.Add( invoice );
 
@@ -187,7 +186,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "invoice was already fully paid", result );
+			Assert.That( "invoice was already fully paid", Is.EqualTo(result) );
 		}
 
 		[Test]
@@ -198,13 +197,13 @@ namespace RefactorThis.Domain.Tests
 			{
 				Amount = 10,
 				AmountPaid = 5,
-				Payments = new List<Payment>
-				{
-					new Payment
+				Payments =
+                [
+                    new Payment
 					{
 						Amount = 5
 					}
-				}
+				]
 			};
 			repo.Add( invoice );
 
@@ -217,7 +216,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "another partial payment received, still not fully paid", result );
+			Assert.That( "another partial payment received, still not fully paid", Is.EqualTo(result) );
 		}
 
 		[Test]
@@ -241,7 +240,7 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "invoice is now partially paid", result );
+			Assert.That( "invoice is now partially paid", Is.EqualTo(result) );
 		}
 	}
 }
