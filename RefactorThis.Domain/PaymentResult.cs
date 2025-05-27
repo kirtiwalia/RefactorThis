@@ -13,6 +13,7 @@
 
 		/// <summary>True when the payment mutated invoice state; false when it was rejected.</summary>
 		public bool IsSuccess { get; }
+
 		/// <summary>A user-friendly description of the outcome.</summary>
 		public string Message { get; }
 

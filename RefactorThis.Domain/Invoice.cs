@@ -1,33 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RefactorThis.Domain
 {
-	/// <summary>Aggregate-root representing an accounts-receivable invoice.</summary>
+	/// <summary>
+	/// Aggregate root representing an accounts-receivable invoice.
+	/// Encapsulates business rules for applying payments and tracking tax.
+	/// </summary>
 	public class Invoice
 	{
-		public Invoice()
-		{
-			Payments = new List<Payment>();
-		}
-
-		// Properties
-		public decimal Amount { get; set; }
-		public decimal AmountPaid { get; private set; }
-		public decimal TaxAmount { get; private set; }
-		public List<Payment> Payments { get; }
-
-		public InvoiceType Type { get; set; }
+		private readonly IInvoiceTaxStrategy _taxStrategy;
 
 		/// <summary>
-		/// Applies <paramref name="payment"/> and returns a rich result describing what happened.
+		/// Creates a new invoice of the specified type.
 		/// </summary>
+		/// <param name="type">The invoice type (e.g. Standard or Commercial).</param>
+		public Invoice(InvoiceType type)
+		{
+			Type = type;
+			Payments = new List<Payment>();
+			_taxStrategy = InvoiceTaxStrategyFactory.GetStrategy(type);
+		}
+
+		/// <summary>
+		/// The total invoice amount due.
+		/// </summary>
+		public decimal Amount { get; set; }
+
+		/// <summary>
+		/// The total amount paid against this invoice so far.
+		/// </summary>
+		public decimal AmountPaid { get; private set; }
+
+		/// <summary>
+		/// The total tax amount calculated from payments.
+		/// </summary>
+		public decimal TaxAmount { get; private set; }
+
+		/// <summary>
+		/// The list of payments that have been applied to this invoice.
+		/// </summary>
+		public List<Payment> Payments { get; }
+
+		/// <summary>
+		/// The classification of this invoice (e.g., Standard or Commercial).
+		/// </summary>
+		public InvoiceType Type { get; }
+
+		/// <summary>
+		/// Applies a payment to this invoice and returns a result indicating the outcome.
+		/// Business rules around overpayment, full payment, and tax calculation are enforced.
+		/// </summary>
+		/// <param name="payment">The payment to apply.</param>
+		/// <returns>A <see cref="PaymentResult"/> indicating success or failure with a message.</returns>
 		public PaymentResult ApplyPayment(Payment payment)
+		{
+			var validationResult = ValidateInvoiceState();
+			if (validationResult != null)
+			{
+				return validationResult;
+			}
+
+			if (IsAlreadyFullyPaid())
+			{
+				return PaymentResult.Failure(InvoiceMessages.InvoiceAlreadyFullyPaid);
+			}
+
+			if (IsOverPayment(payment))
+			{
+				var message = Payments.Count > 0
+					? InvoiceMessages.PaymentExceedsRemainingBalance
+					: InvoiceMessages.PaymentExceedsInvoiceAmount;
+
+				return PaymentResult.Failure(message);
+			}
+
+			ApplyPaymentInternal(payment);
+
+			return PaymentResult.Success(GenerateResultMessage());
+		}
+
+		/// <summary>
+		/// Validates the current state of the invoice and returns a failure result if needed.
+		/// </summary>
+		/// <returns>A <see cref="PaymentResult"/> if invalid, otherwise null.</returns>
+		private PaymentResult /*nullable*/ ValidateInvoiceState()
 		{
 			if (Amount == 0)
 			{
-				// No money owed => no payment required.
 				if (Payments.Count == 0)
 				{
 					return PaymentResult.Failure(InvoiceMessages.NoPaymentNeeded);
@@ -36,66 +96,47 @@ namespace RefactorThis.Domain
 				throw new InvalidOperationException(InvoiceMessages.InvalidZeroAmountWithPayments);
 			}
 
-			if (AmountPaid == Amount)
-			{
-				return PaymentResult.Failure(InvoiceMessages.InvoiceAlreadyFullyPaid);
-			}
+			return null;
+		}
 
-			decimal remaining = Amount - AmountPaid;
+		/// <summary>
+		/// Determines whether the invoice has already been fully paid.
+		/// </summary>
+		private bool IsAlreadyFullyPaid() => AmountPaid == Amount;
 
-			// Too much?
-			if (payment.Amount > remaining)
-			{
-				if (Payments.Any())
-				{
-					return PaymentResult.Failure(InvoiceMessages.PaymentExceedsRemainingBalance);
-				}
+		/// <summary>
+		/// Determines whether the given payment amount exceeds the remaining balance.
+		/// </summary>
+		private bool IsOverPayment(Payment payment) => payment.Amount > (Amount - AmountPaid);
 
-				return PaymentResult.Failure(InvoiceMessages.PaymentExceedsInvoiceAmount);
-			}
-
-			// Valid payment
+		/// <summary>
+		/// Applies a valid payment, updating the amount paid, tax, and payment history.
+		/// </summary>
+		private void ApplyPaymentInternal(Payment payment)
+		{
 			AmountPaid += payment.Amount;
 			Payments.Add(payment);
+			TaxAmount += _taxStrategy.CalculateTax(payment.Amount, Payments.Count);
+		}
 
-			if (Type == InvoiceType.Commercial)
-			{
-				// Commercial invoices accrue tax on every payment.
-				TaxAmount += payment.Amount * 0.14m;
-			}
-			else if (Type == InvoiceType.Standard && Payments.Count > 1)
-			{
-				// Standard invoices accrue tax only on the *first* payment,
-				// mirroring original behaviour.
-				TaxAmount += payment.Amount * 0.14m;
-			}
-
-			// Determine result message
+		/// <summary>
+		/// Generates a result message describing the new payment state.
+		/// </summary>
+		private string GenerateResultMessage()
+		{
 			bool fullyPaid = AmountPaid == Amount;
 			bool wasPartialBefore = Payments.Count > 1;
 
 			if (fullyPaid)
 			{
-				if (wasPartialBefore)
-				{
-					return PaymentResult.Success(InvoiceMessages.FinalPartialPaymentComplete);
-				}
-				else
-				{
-					return PaymentResult.Success(InvoiceMessages.InvoiceNowFullyPaid);
-				}
+				return wasPartialBefore
+					? InvoiceMessages.FinalPartialPaymentComplete
+					: InvoiceMessages.InvoiceNowFullyPaid;
 			}
-			else
-			{
-				if (wasPartialBefore)
-				{
-					return PaymentResult.Success(InvoiceMessages.AdditionalPartialPayment);
-				}
-				else
-				{
-					return PaymentResult.Success(InvoiceMessages.InitialPartialPayment);
-				}
-			}
+
+			return wasPartialBefore
+				? InvoiceMessages.AdditionalPartialPayment
+				: InvoiceMessages.InitialPartialPayment;
 		}
 	}
 }

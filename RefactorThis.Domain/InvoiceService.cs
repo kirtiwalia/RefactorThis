@@ -22,12 +22,10 @@ namespace RefactorThis.Domain
 		/// </exception>
 		public string ProcessPayment(Payment payment)
 		{
-			var invoice = _repository.GetByReference(payment.Reference);
+			var invoice = _repository.GetByReference(payment.Reference) ?? throw new InvalidOperationException(InvoiceMessages.NoInvoiceMatchingPayment);
 
-			if (invoice == null)
-				throw new InvalidOperationException("There is no invoice matching this payment");
+            PaymentResult result = invoice.ApplyPayment(payment);
 
-			PaymentResult result = invoice.ApplyPayment(payment);
 			_repository.Save(invoice);
 
 			return result.Message;
