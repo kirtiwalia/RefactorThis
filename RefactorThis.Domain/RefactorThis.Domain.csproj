@@ -38,18 +38,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommercialInvoiceTaxStrategy.cs" />
     <Compile Include="IInvoiceRepository.cs" />
-    <Compile Include="IInvoiceTaxStrategy.cs" />
     <Compile Include="Invoice.cs" />
     <Compile Include="InvoiceMessages.cs" />
     <Compile Include="InvoiceService.cs" />
-    <Compile Include="InvoiceTaxStrategyFactory.cs" />
     <Compile Include="InvoiceType.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="PaymentResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StandardInvoiceTaxStrategy.cs" />
+    <Compile Include="TaxStrategy\CommercialInvoiceTaxStrategy.cs" />
+    <Compile Include="TaxStrategy\IInvoiceTaxStrategy.cs" />
+    <Compile Include="TaxStrategy\InvoiceTaxStrategyFactory.cs" />
+    <Compile Include="TaxStrategy\StandardInvoiceTaxStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

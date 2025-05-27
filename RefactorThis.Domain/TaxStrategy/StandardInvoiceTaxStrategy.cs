@@ -1,4 +1,4 @@
-﻿namespace RefactorThis.Domain
+﻿namespace RefactorThis.Domain.TaxStrategy
 {
 	/// <summary>
 	/// Tax strategy for standard invoices: tax is applied only on the first payment.

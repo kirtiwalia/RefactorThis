@@ -1,4 +1,4 @@
-﻿namespace RefactorThis.Domain
+﻿namespace RefactorThis.Domain.TaxStrategy
 {
 	/// <summary>
 	/// Tax strategy for commercial invoices: tax is applied on every payment.

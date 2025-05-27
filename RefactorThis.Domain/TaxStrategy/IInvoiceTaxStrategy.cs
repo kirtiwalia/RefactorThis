@@ -1,4 +1,4 @@
-﻿namespace RefactorThis.Domain
+﻿namespace RefactorThis.Domain.TaxStrategy
 {
 	/// <summary>
 	/// Represents a strategy for calculating tax on an invoice payment.

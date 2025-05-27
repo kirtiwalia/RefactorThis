@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RefactorThis.Domain.TaxStrategy;
 
 namespace RefactorThis.Domain
 {

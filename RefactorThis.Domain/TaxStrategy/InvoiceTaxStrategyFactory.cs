@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RefactorThis.Domain
+namespace RefactorThis.Domain.TaxStrategy
 {
 	/// <summary>
 	/// Factory responsible for returning the appropriate tax strategy
