@@ -9,7 +9,7 @@ namespace RefactorThis.Domain.Tests
 	public class InvoicePaymentProcessorTests
 	{
 		[Test]
-		public void ProcessPayment_Should_ThrowException_When_NoInoiceFoundForPaymentReference( )
+		public void ProcessPayment_Should_ThrowException_When_NoInvoiceFoundForPaymentReference( )
 		{
 			var repo = new InvoiceRepository( );
 
@@ -142,6 +142,7 @@ namespace RefactorThis.Domain.Tests
 			var repo = new InvoiceRepository( );
 			var invoice = new Invoice( repo )
 			{
+				Type = InvoiceType.Standard,
 				Amount = 10,
 				AmountPaid = 5,
 				Payments = new List<Payment>
@@ -164,6 +165,44 @@ namespace RefactorThis.Domain.Tests
 			var result = paymentProcessor.ProcessPayment( payment );
 
 			Assert.AreEqual( "final partial payment received, invoice is now fully paid", result );
+			Assert.AreEqual( 10, invoice.AmountPaid );
+			Assert.AreEqual( 0m, invoice.TaxAmount );
+			Assert.AreEqual( 2, invoice.Payments.Count );
+		}
+
+		[Test]
+		public void ProcessPayment_Should_ApplyTaxToCommercialInvoice_When_PartialPaymentExistsAndAmountPaidEqualsAmountDue( )
+		{
+			var repo = new InvoiceRepository( );
+			var invoice = new Invoice( repo )
+			{
+				Type = InvoiceType.Commercial,
+				Amount = 10,
+				AmountPaid = 5,
+				TaxAmount = 0.7m,
+				Payments = new List<Payment>
+				{
+					new Payment
+					{
+						Amount = 5
+					}
+				}
+			};
+			repo.Add( invoice );
+
+			var paymentProcessor = new InvoiceService( repo );
+
+			var payment = new Payment( )
+			{
+				Amount = 5
+			};
+
+			var result = paymentProcessor.ProcessPayment( payment );
+
+			Assert.AreEqual( "final partial payment received, invoice is now fully paid", result );
+			Assert.AreEqual( 10, invoice.AmountPaid );
+			Assert.AreEqual( 1.4m, invoice.TaxAmount );
+			Assert.AreEqual( 2, invoice.Payments.Count );
 		}
 
 		[Test]
@@ -174,7 +213,7 @@ namespace RefactorThis.Domain.Tests
 			{
 				Amount = 10,
 				AmountPaid = 0,
-				Payments = new List<Payment>( ) { new Payment( ) { Amount = 10 } }
+				Payments = new List<Payment>( )
 			};
 			repo.Add( invoice );
 
@@ -187,7 +226,10 @@ namespace RefactorThis.Domain.Tests
 
 			var result = paymentProcessor.ProcessPayment( payment );
 
-			Assert.AreEqual( "invoice was already fully paid", result );
+			Assert.AreEqual( "invoice is now fully paid", result );
+			Assert.AreEqual( 10, invoice.AmountPaid );
+			Assert.AreEqual( 1.4m, invoice.TaxAmount );
+			Assert.AreEqual( 1, invoice.Payments.Count );
 		}
 
 		[Test]
@@ -196,6 +238,7 @@ namespace RefactorThis.Domain.Tests
 			var repo = new InvoiceRepository( );
 			var invoice = new Invoice( repo )
 			{
+				Type = InvoiceType.Commercial,
 				Amount = 10,
 				AmountPaid = 5,
 				Payments = new List<Payment>
@@ -218,6 +261,9 @@ namespace RefactorThis.Domain.Tests
 			var result = paymentProcessor.ProcessPayment( payment );
 
 			Assert.AreEqual( "another partial payment received, still not fully paid", result );
+			Assert.AreEqual( 6, invoice.AmountPaid );
+			Assert.AreEqual( 0.14m, invoice.TaxAmount );
+			Assert.AreEqual( 2, invoice.Payments.Count );
 		}
 
 		[Test]
@@ -242,6 +288,9 @@ namespace RefactorThis.Domain.Tests
 			var result = paymentProcessor.ProcessPayment( payment );
 
 			Assert.AreEqual( "invoice is now partially paid", result );
+			Assert.AreEqual( 1, invoice.AmountPaid );
+			Assert.AreEqual( 0.14m, invoice.TaxAmount );
+			Assert.AreEqual( 1, invoice.Payments.Count );
 		}
 	}
 }
