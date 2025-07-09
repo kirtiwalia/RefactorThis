@@ -1,11 +1,14 @@
+using RefactorThis.Core.entities;
+using RefactorThis.Core.Interfaces;
+
 namespace RefactorThis.Persistence {
-	public class InvoiceRepository
-	{
-		private Invoice _invoice;
+	public class InvoiceRepository : IInvoiceRepository
+    {
+		private Invoice _invoice = new Invoice();
 
 		public Invoice GetInvoice( string reference )
 		{
-			return _invoice;
+			return  _invoice;
 		}
 
 		public void SaveInvoice( Invoice invoice )
