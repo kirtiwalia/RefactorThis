@@ -11,7 +11,6 @@ namespace RefactorThis.ConsoleApp
         {
             IRepository repo = new InvoiceRepository();
             IInvoiceService invoiceService = new InvoiceService(repo);
-
             // Setup a test invoice
             var invoice = new Invoice(repo)
             {
@@ -21,7 +20,6 @@ namespace RefactorThis.ConsoleApp
                 Type = InvoiceType.Commercial
             };
             repo.Add(invoice);
-
             // Process a payment
             var payment = new Payment
             {
