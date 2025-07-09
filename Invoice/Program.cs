@@ -25,7 +25,7 @@ namespace RefactorThis.ConsoleApp
             // Process a payment
             var payment = new Payment
             {
-                Amount = 50,
+                Amount = 100,
                 Reference = "" // match what's in the repo
             };
 
