@@ -29,6 +29,8 @@ namespace RefactorThis.ConsoleApp
                 Reference = "" // match what's in the repo
             };
 
+            Console.WriteLine(payment);
+
             string result = invoiceService.ProcessPayment(payment);
             Console.WriteLine(result);
         }
