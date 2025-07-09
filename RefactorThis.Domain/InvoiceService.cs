@@ -8,7 +8,6 @@ namespace RefactorThis.Domain
     public class InvoiceService : IInvoiceService
     {
         private readonly IRepository _invoiceRepository;
-
         public InvoiceService(IRepository invoiceRepository)
         {
             _invoiceRepository = invoiceRepository;
