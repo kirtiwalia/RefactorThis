@@ -29,7 +29,8 @@ namespace RefactorThis.ConsoleApp
                 Reference = "" // match what's in the repo
             };
 
-            Console.WriteLine(payment);
+            Console.WriteLine("Debugging ProcessPayment method for PR testing."); // ✅ forceful, visible change
+
 
             string result = invoiceService.ProcessPayment(payment);
             Console.WriteLine(result);
