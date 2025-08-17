@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using RefactorThis.Persistence.IRepository;
+using RefactorThis.Persistence.Models;
+using RefactorThis.Persistence.Repository;
+using System;
 using System.Collections.Generic;
-using NUnit.Framework;
-using RefactorThis.Persistence;
 
 namespace RefactorThis.Domain.Tests
 {
@@ -11,32 +13,23 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ThrowException_When_NoInoiceFoundForPaymentReference( )
 		{
-			var repo = new InvoiceRepository( );
+            IInvoiceRepository repo = new InvoiceRepository( );
 
-			Invoice invoice = null;
 			var paymentProcessor = new InvoiceService( repo );
 
 			var payment = new Payment( );
-			var failureMessage = "";
 
-			try
-			{
-				var result = paymentProcessor.ProcessPayment( payment );
-			}
-			catch ( InvalidOperationException e )
-			{
-				failureMessage = e.Message;
-			}
+            var result = paymentProcessor.ProcessPayment(payment);
 
-			Assert.AreEqual( "There is no invoice matching this payment", failureMessage );
+            Assert.AreEqual("There is no invoice matching this payment", result);
 		}
 
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_NoPaymentNeeded( )
 		{
-			var repo = new InvoiceRepository( );
+            IInvoiceRepository repo = new InvoiceRepository( );
 
-			var invoice = new Invoice( repo )
+			var invoice = new Invoice()
 			{
 				Amount = 0,
 				AmountPaid = 0,
@@ -57,9 +50,9 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_InvoiceAlreadyFullyPaid( )
 		{
-			var repo = new InvoiceRepository( );
+            IInvoiceRepository repo = new InvoiceRepository( );
 
-			var invoice = new Invoice( repo )
+			var invoice = new Invoice()
 			{
 				Amount = 10,
 				AmountPaid = 10,
@@ -85,8 +78,8 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_PartialPaymentExistsAndAmountPaidExceedsAmountDue( )
 		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
+            IInvoiceRepository repo = new InvoiceRepository( );
+			var invoice = new Invoice()
 			{
 				Amount = 10,
 				AmountPaid = 5,
@@ -115,8 +108,8 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnFailureMessage_When_NoPartialPaymentExistsAndAmountPaidExceedsInvoiceAmount( )
 		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
+            IInvoiceRepository repo = new InvoiceRepository( );
+			var invoice = new Invoice()
 			{
 				Amount = 5,
 				AmountPaid = 0,
@@ -139,8 +132,8 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnFullyPaidMessage_When_PartialPaymentExistsAndAmountPaidEqualsAmountDue( )
 		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
+            IInvoiceRepository repo = new InvoiceRepository( );
+			var invoice = new Invoice()
 			{
 				Amount = 10,
 				AmountPaid = 5,
@@ -169,8 +162,8 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnFullyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidEqualsInvoiceAmount( )
 		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
+            IInvoiceRepository repo = new InvoiceRepository( );
+			var invoice = new Invoice( )
 			{
 				Amount = 10,
 				AmountPaid = 0,
@@ -193,8 +186,8 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_PartialPaymentExistsAndAmountPaidIsLessThanAmountDue( )
 		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
+            IInvoiceRepository repo = new InvoiceRepository( );
+			var invoice = new Invoice()
 			{
 				Amount = 10,
 				AmountPaid = 5,
@@ -223,8 +216,8 @@ namespace RefactorThis.Domain.Tests
 		[Test]
 		public void ProcessPayment_Should_ReturnPartiallyPaidMessage_When_NoPartialPaymentExistsAndAmountPaidIsLessThanInvoiceAmount( )
 		{
-			var repo = new InvoiceRepository( );
-			var invoice = new Invoice( repo )
+            IInvoiceRepository repo = new InvoiceRepository( );
+			var invoice = new Invoice()
 			{
 				Amount = 10,
 				AmountPaid = 0,
