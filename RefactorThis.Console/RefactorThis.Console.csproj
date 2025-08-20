@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RefactorThis.Application\RefactorThis.Application.csproj" />
+    <ProjectReference Include="..\RefactorThis.Infrastructure\RefactorThis.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
