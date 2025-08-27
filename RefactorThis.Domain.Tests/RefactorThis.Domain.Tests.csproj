@@ -41,6 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
   <ItemGroup>
 	<PackageReference Include="NUnit" Version="3.13.3" />
 	<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
