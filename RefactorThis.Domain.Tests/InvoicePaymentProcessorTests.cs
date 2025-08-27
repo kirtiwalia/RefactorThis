@@ -243,5 +243,75 @@ namespace RefactorThis.Domain.Tests
 
 			Assert.AreEqual( "invoice is now partially paid", result );
 		}
-	}
+
+        [Test]
+        public void ProcessPayment_Should_TransitionToFullyPaid_When_MultiplePartialPaymentsAddUpToInvoiceAmount()
+        {
+            var repo = new InvoiceRepository();
+            var invoice = new Invoice(repo)
+            {
+                Amount = 10,
+                AmountPaid = 0,
+                Payments = new List<Payment>()
+            };
+            repo.Add(invoice);
+
+            var paymentProcessor = new InvoiceService(repo);
+
+            var firstPayment = new Payment { Amount = 4 };
+            var firstResult = paymentProcessor.ProcessPayment(firstPayment);
+            Assert.AreEqual("invoice is now partially paid", firstResult);
+
+            var secondPayment = new Payment { Amount = 6 };
+            var secondResult = paymentProcessor.ProcessPayment(secondPayment);
+            Assert.AreEqual("final partial payment received, invoice is now fully paid", secondResult);
+        }
+
+        [Test]
+        public void ProcessPayment_Should_AddPaymentToInvoice_When_Successful()
+        {
+            var repo = new InvoiceRepository();
+            var invoice = new Invoice(repo)
+            {
+                Amount = 10,
+                AmountPaid = 0,
+                Payments = new List<Payment>()
+            };
+            repo.Add(invoice);
+
+            var paymentProcessor = new InvoiceService(repo);
+
+            var payment = new Payment { Amount = 5 };
+
+            var result = paymentProcessor.ProcessPayment(payment);
+
+            Assert.AreEqual("invoice is now partially paid", result);
+            Assert.AreEqual(5, invoice.AmountPaid);
+            Assert.AreEqual(1, invoice.Payments.Count);
+            Assert.AreEqual(5, invoice.Payments[0].Amount);
+        }
+
+        [Test]
+        public void ProcessPayment_Should_HandleNullPaymentsList()
+        {
+            var repo = new InvoiceRepository();
+            var invoice = new Invoice(repo)
+            {
+                Amount = 10,
+                AmountPaid = 0,
+                Payments = null // deliberately null
+            };
+            repo.Add(invoice);
+
+            var paymentProcessor = new InvoiceService(repo);
+
+            var payment = new Payment { Amount = 3 };
+            var result = paymentProcessor.ProcessPayment(payment);
+
+            Assert.AreEqual("invoice is now partially paid", result);
+            Assert.AreEqual(3, invoice.AmountPaid);
+            Assert.IsNotNull(invoice.Payments);
+            Assert.AreEqual(1, invoice.Payments.Count);
+        }
+    }
 }
