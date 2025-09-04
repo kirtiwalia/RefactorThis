@@ -21,7 +21,7 @@ namespace RefactorThis.Domain
 
 			if ( inv == null )
 			{
-				throw new InvalidOperationException( "There is no invoice matching this payment" );
+				throw new InvalidOperationException( "There is no invoice matching this payment Refactor" );
 			}
 			else
 			{
