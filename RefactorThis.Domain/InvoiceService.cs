@@ -8,7 +8,10 @@ namespace RefactorThis.Domain
 	{
 		private readonly InvoiceRepository _invoiceRepository;
 
-		public InvoiceService( InvoiceRepository invoiceRepository )
+		public InvoiceService( ) : this( new InvoiceRepository( ) )
+		{
+        }
+        public InvoiceService( InvoiceRepository invoiceRepository )
 		{
 			_invoiceRepository = invoiceRepository;
 		}
