@@ -8,7 +8,10 @@ namespace RefactorThis.Domain
 	{
 		private readonly InvoiceRepository _invoiceRepository;
 
-		public InvoiceService( InvoiceRepository invoiceRepository )
+		public InvoiceService( ) : this( new InvoiceRepository( ) )
+		{
+        }
+        public InvoiceService( InvoiceRepository invoiceRepository )
 		{
 			_invoiceRepository = invoiceRepository;
 		}
@@ -21,7 +24,7 @@ namespace RefactorThis.Domain
 
 			if ( inv == null )
 			{
-				throw new InvalidOperationException( "There is no invoice matching this payment" );
+				throw new InvalidOperationException( "There is no invoice matching this payment Refactor" );
 			}
 			else
 			{
